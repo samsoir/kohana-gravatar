@@ -8,5 +8,10 @@ return array(
 		'view'              => 'gravatar/image',                     // The default view
 		'rating'            => Gravatar::GRAVATAR_G,                 // The default rating
 		'alt'               => FALSE,                                // Alternate image string, FALSE to omit, string to include
-	)
+	),
+	'xmlrpc' => array(
+		'service'           => 'https://secure.gravatar.com/xmlrpc?user=',
+		'api_key'           => '',
+		'email'             => '',
+	),
 );
