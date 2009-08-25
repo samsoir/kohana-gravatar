@@ -118,7 +118,7 @@ class Gravatar {
 		elseif (is_string($config))
 		{
 			if ($config = Kohana::config('gravatar.'.$config) === NULL)
-				throw new Gravatar_Exception(printf('Gravatar.__construct() , Invalid configuration group name : %s', $config);
+				throw new Gravatar_Exception(printf('Gravatar.__construct() , Invalid configuration group name : %s', $config));
 
 			$this->_config = $config;
 		}
@@ -158,7 +158,7 @@ class Gravatar {
 	 */
 	public function __set($key, $value)
 	{
-		if ($key === 'email'))
+		if ($key === 'email')
 		{
 			$key = '_'.$key;
 			$this->$key;
@@ -193,7 +193,7 @@ class Gravatar {
 		if (validate::email($email))
 			$this->_email = strtolower($email);
 		else
-			throw new Gravatar_Exception(printf('The email address %s is incorrectly formatted', $email);
+			throw new Gravatar_Exception(printf('The email address %s is incorrectly formatted', $email));
 
 		return $this;
 	}
@@ -247,7 +247,7 @@ class Gravatar {
 		if (validate::url($url))
 			$this->_config['default'] = $url;
 		else
-			throw new Gravatar(printf('The url %s is improperly formatted', $url);
+			throw new Gravatar(printf('The url %s is improperly formatted', $url));
 
 		return $this;
 	}
