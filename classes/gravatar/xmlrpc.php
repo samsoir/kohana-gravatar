@@ -7,13 +7,13 @@
  * [ref-gravatar]: http://en.gravatar.com/
  * 
  * @package     Gravatar XMLRPC API for Kohana PHP 3
+ * @requires    PHP-SOAP
  * @author      Sam C. De Freyssinet
  * @copyright   (c) 2009 De Freyssinet
  * @version     3.0.0
  * @license     http://creativecommons.org/licenses/by-sa/2.0/uk/
- * @abstract
  */
-abstract class Gravatar_Xmlrpc {
+class Gravatar_Xmlrpc {
 
 	/**
 	 * Create an instance of the Gravatar XMLRPC API client
@@ -53,6 +53,20 @@ abstract class Gravatar_Xmlrpc {
 	protected $_config;
 
 	/**
+	 * Xml Writing Driver
+	 *
+	 * @var     mixed
+	 */
+	protected $_xmlWriter;
+
+	/**
+	 * SOAP Client
+	 *
+	 * @var     SoapClient
+	 */
+	protected $_soapClient;
+
+	/**
 	 * Constructor, maintains the singleton or factory pattern
 	 *
 	 * @param   array        $config
@@ -60,9 +74,20 @@ abstract class Gravatar_Xmlrpc {
 	 */
 	protected function __construct($config)
 	{
+		// Check for soap
+		if ( ! extension_loaded('Soap'))
+			throw new Gravatar_Exception('Soap extension must be loaded to use this class!');
+
 		// Configure this library
 		$config += Kohana::config('gravatar.xmlrpc');
 		$this->_config = $config;
+
+		// Setup SOAP Client
+		$this->_soapClient = new SoapClient(null, array
+		(
+			'location' => request::instance()->uri,
+			'uri'      => $this->_config['service'].$this->_config['email'],
+		));
 	}
 
 	/**
@@ -111,9 +136,11 @@ abstract class Gravatar_Xmlrpc {
 	 * @param   array        $hashes
 	 * @return  array
 	 * @access  public
-	 * @abstract
 	 */
-	abstract public function exists($hashes);
+	public function check_hash($hashes)
+	{
+		
+	}
 
 	/**
 	 * Returns an array of email addresses
@@ -121,9 +148,11 @@ abstract class Gravatar_Xmlrpc {
 	 *
 	 * @return  array
 	 * @access  public
-	 * @abstract
 	 */
-	abstract public function addresses();
+	public function addresses()
+	{
+		
+	}
 
 	/**
 	 * Returns an array containing images
@@ -132,9 +161,11 @@ abstract class Gravatar_Xmlrpc {
 	 *
 	 * @return  array
 	 * @access  public
-	 * @abstract
 	 */
-	abstract public function userimages();
+	public function user_images()
+	{
+		
+	}
 
 	/**
 	 * Save an image to the registered account.
@@ -145,9 +176,11 @@ abstract class Gravatar_Xmlrpc {
 	 * @param   int          $rating [Optional]
 	 * @return  string|boolean
 	 * @access  public
-	 * @abstract
 	 */
-	abstract public function save_data($image, $rating = 0);
+	public function save_data($image, $rating = 0)
+	{
+		
+	}
 
 	/**
 	 * Save a URL to the registered account.
@@ -156,9 +189,11 @@ abstract class Gravatar_Xmlrpc {
 	 * @param   int          $rating [Optional]
 	 * @return  string|boolean
 	 * @access  public
-	 * @abstract
 	 */
-	abstract public function save_url($url, $rating = 0);
+	public function save_url($url, $rating = 0)
+	{
+		
+	}
 
 	/**
 	 * Assign a user image on Gravatar to the addresses
@@ -168,32 +203,33 @@ abstract class Gravatar_Xmlrpc {
 	 * @param   array        $addresses 
 	 * @return  array
 	 * @access  public
-	 * @abstract
 	 */
-	abstract public function use_userimage($user_image, $addresses);
+	public function use_image($user_image, $addresses)
+	{
+		
+	}
 
 	/**
 	 * Test function
 	 *
 	 * @return  mixed
 	 * @access  public
-	 * @abstract
 	 */
-	abstract public function test();
+	public function test()
+	{
+		
+	}
 
 	/**
 	 * Execute the Xmlrpc request and return
 	 * the result
 	 *
-	 * @param   string       $xml 
 	 * @return  mixed
 	 * @access  protected
 	 */
-	protected function _exec($xml)
+	protected function _exec()
 	{
-		// Create the URL
-		$url = $this->_config['service'].md5($this->_config['email']);
-
-		$result = Remote::get()
+		
+		
 	}
 }
