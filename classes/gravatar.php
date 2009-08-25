@@ -208,8 +208,8 @@ class Gravatar {
 	 */
 	public function size($size)
 	{
-		if (is_numeric($size) AND $size > 0)
-			$this->_config['size'] = $size;
+		if (ctype_digit((string) $size))
+			$this->_config['size'] = (int) $size;
 		else
 			throw new Gravatar_Exception('The image size must be greater than zero');
 
