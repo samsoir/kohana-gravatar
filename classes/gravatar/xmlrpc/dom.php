@@ -25,9 +25,12 @@ class Gravatar_Xmlrpc_Dom extends Gravatar_Xmlrpc {
 	 * @param   array        $hashes
 	 * @return  array
 	 * @access  public
-	 * @abstract
+	 * @todo
 	 */
-	public function exists($hashes);
+	public function exists($hashes)
+	{
+		
+	}
 
 	/**
 	 * Returns an array of email addresses
@@ -35,9 +38,12 @@ class Gravatar_Xmlrpc_Dom extends Gravatar_Xmlrpc {
 	 *
 	 * @return  array
 	 * @access  public
-	 * @abstract
+	 * @todo
 	 */
-	public function addresses();
+	public function addresses()
+	{
+		
+	}
 
 	/**
 	 * Returns an array containing images
@@ -46,9 +52,12 @@ class Gravatar_Xmlrpc_Dom extends Gravatar_Xmlrpc {
 	 *
 	 * @return  array
 	 * @access  public
-	 * @abstract
+	 * @todo
 	 */
-	public function userimages();
+	public function userimages()
+	{
+		
+	}
 
 	/**
 	 * Save an image to the registered account.
@@ -58,9 +67,12 @@ class Gravatar_Xmlrpc_Dom extends Gravatar_Xmlrpc {
 	 * @param   string       $image
 	 * @param   int          $rating [Optional]
 	 * @return  string|boolean
-	 * @access  public
+	 * @todo
 	 */
-	public function save_data($image, $rating = 0);
+	public function save_data($image, $rating = 0)
+	{
+		
+	}
 
 	/**
 	 * Save a URL to the registered account.
@@ -68,9 +80,12 @@ class Gravatar_Xmlrpc_Dom extends Gravatar_Xmlrpc {
 	 * @param   string       $url 
 	 * @param   int          $rating [Optional]
 	 * @return  string|boolean
-	 * @access  public
+	 * @todo
 	 */
-	public function save_url($url, $rating = 0);
+	public function save_url($url, $rating = 0)
+	{
+		
+	}
 
 	/**
 	 * Assign a user image on Gravatar to the addresses
@@ -80,14 +95,22 @@ class Gravatar_Xmlrpc_Dom extends Gravatar_Xmlrpc {
 	 * @param   array        $addresses 
 	 * @return  array
 	 * @access  public
+	 * @todo
 	 */
-	public function use_userimage($user_image, $addresses);
+	public function use_userimage($user_image, $addresses)
+	{
+		
+	}
 
 	/**
 	 * Test function
 	 *
 	 * @return  mixed
 	 * @access  public
+	 * @todo
 	 */
-	public function test();
+	public function test()
+	{
+		
+	}
 } // End Gravatar_Xmlrpc_Dom extends Gravatar_Xmlrpc
