@@ -118,9 +118,9 @@ class Gravatar {
 		elseif (is_string($config))
 		{
 			if ($config = Kohana::config('gravatar.'.$config) === NULL)
-				throw new Gravatar_Exception(printf('Gravatar.__construct() , Invalid configuration group name : %s', $config));
+				throw new Gravatar_Exception('Gravatar.__construct() , Invalid configuration group name : :config', array(':config' => $config));
 
-			$this->_config = $config;
+			$this->_config = $config + Kohana::config('gravatar.default');
 		}
 	}
 
@@ -193,7 +193,7 @@ class Gravatar {
 		if (validate::email($email))
 			$this->_email = strtolower($email);
 		else
-			throw new Gravatar_Exception(printf('The email address %s is incorrectly formatted', $email));
+			throw new Gravatar_Exception('The email address : :email is incorrectly formatted', array(':email' => $email));
 
 		return $this;
 	}
@@ -229,7 +229,7 @@ class Gravatar {
 		if (in_array(strtoupper($rating), array('G', 'PG', 'R', 'X')))
 			$this->_config['rating'] = strtoupper($rating);
 		else
-			throw new Gravatar_Exception(printf('The rating value %s is not valid. Please use G, PG, R or X. Also available through Class constants'), $rating);
+			throw new Gravatar_Exception('The rating value :rating is not valid. Please use G, PG, R or X. Also available through Class constants', array(':rating' => $rating));
 
 		return $this;
 	}
@@ -247,7 +247,7 @@ class Gravatar {
 		if (validate::url($url))
 			$this->_config['default'] = $url;
 		else
-			throw new Gravatar(printf('The url %s is improperly formatted', $url));
+			throw new Gravatar('The url : :url is improperly formatted', array(':url' => $url));
 
 		return $this;
 	}
@@ -282,12 +282,12 @@ class Gravatar {
 		if (isset($email))
 			$this->email($email);
 
-		$data = array('src' => array('src' => $this->_generate_url()));
+		$data = array('attr' => array(), 'src' => $this->_generate_url());
 
 		if ($this->_attributes)
-			$data['src'] += $this->_attributes;
+		    $data['attr'] += $this->_attributes;
 
-		$data['alt'] = $this->_process_alt();
+		$data['attr']['alt'] = $this->_process_alt();
 
 		return (string) $view ? new View($view, $data) : new View($this->_config['view'], $data);;
 	}

@@ -1,0 +1,1 @@
+<?= html::image($src, $alt); ?>
