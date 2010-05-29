@@ -293,9 +293,9 @@ class Gravatar_Xmlrpc {
 	 */
 	protected function _prepare_service_endpoint()
 	{
-		if ($user === NULL or $password === NULL)
+		if ($this->_config['email'] === NULL)
 		{
-			throw new Gravatar_Xmlrpc_Exception('Username and Password must be supplied to perform Gravatar API requests!');
+			throw new Gravatar_Xmlrpc_Exception('Username must be supplied to perform Gravatar API requests!');
 		}
 
 		// Generate full uri with user id
