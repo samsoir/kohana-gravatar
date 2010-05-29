@@ -31,13 +31,9 @@ class Gravatar_Xmlrpc {
 	 * @return  Gravatar_Xmlrpc
 	 * @access  public
 	 */
-	public static function instance($config = array())
+	public static function factory($config = array())
 	{
-		static $instance;
-
-		empty($instance) and $instance = new Gravatar_Xmlrpc($config);
-
-		return $instance;
+		return new Gravatar_Xmlrpc($config);
 	}
 
 	/**
@@ -46,11 +42,11 @@ class Gravatar_Xmlrpc {
 	protected $_config;
 
 	/**
-	 * Constructor, maintains the singleton or factory pattern
+	 * Constructor
 	 *
 	 * @param   array        $config
 	 */
-	protected function __construct($config)
+	public function __construct($config)
 	{
 		// Check for soap
 		if ( ! extension_loaded('XMLRPC'))
