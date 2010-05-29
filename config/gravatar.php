@@ -10,8 +10,8 @@ return array(
 		'alt'               => FALSE,                                // Alternate image string, FALSE to omit, string to include
 	),
 	'xmlrpc' => array(
-		'service'           => 'https://secure.gravatar.com/xmlrpc?user=',
-		'api_key'           => '',
-		'email'             => '',
+		'service'           => 'https://secure.gravatar.com/xmlrpc',
+		'email'             => NULL,
+		'password'          => NULL,
 	),
 );
