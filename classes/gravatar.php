@@ -1,18 +1,21 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * [ref-gravatar] Gravatars are universal avatars available to all web sites and services.
+ * [Gravatar's](http://en.gravatar.com) are universal avatars available to all web sites and services.
  * Users must register their email addresses with Gravatar before their avatars will be
  * usable with this module. Users with gravatars can have a default image of your selection.
- *
- * [ref-gravatar]: http://en.gravatar.com/
  * 
  * @package     Gravatar for Kohana PHP 3
- * @author      Sam C. De Freyssinet
- * @copyright   (c) 2009 De Freyssinet
- * @version     3.0.0
- * @license     http://creativecommons.org/licenses/by-sa/2.0/uk/
+ * @author      The Kohana Team
+ * @copyright   Copyright (c) 2009-2010 Kohana
+ * @version     3.1.0
+ * @license     Kohana License http://kohanaframework.org/license
  */
 class Gravatar {
+
+	const GRAVATAR_G   = 'G';
+	const GRAVATAR_PG  = 'PG';
+	const GRAVATAR_R   = 'R';
+	const GRAVATAR_X   = 'X';
 
 	/**
 	 * Static instances
@@ -33,41 +36,20 @@ class Gravatar {
 	 * @access  public
 	 * @static
 	 */
-	public static function & instance($email, $config = NULL)
+	public static function instance($email, $config = NULL)
 	{
 		// Create an instance checksum
 		$config_checksum = sha1(serialize($config));
 
 		// Load the Gravatar instance for email and configuration
 		if ( ! isset(self::$_instances[$email][$config_checksum]))
+		{
 			self::$_instances[$email][$config_checksum] = new Gravatar($email, $config);
+		}
 
 		// Return a the instance
 		return self::$_instances[$email][$config_checksum];
 	}
-
-	/**
-	 * Factory method
-	 *
-	 * @param   string       email   the Gravatar to fetch for email address
-	 * @param   string       config  the name of the configuration grouping
-	 * @param   array        config  array of key value configuration pairs
-	 * @return  Gravatar
-	 * @access  public
-	 * @static
-	 */
-	public static function factory($email, $config = NULL)
-	{
-		return new Gravatar($email, $config);
-	}
-
-	/**
-	 * Gravatar Ratings constants
-	 */
-	const GRAVATAR_G   = 'G';
-	const GRAVATAR_PG  = 'PG';
-	const GRAVATAR_R   = 'R';
-	const GRAVATAR_X   = 'X';
 
 	/**
 	 * Configuration for this library, merged with the static config
@@ -81,17 +63,15 @@ class Gravatar {
 	 * Additional attributes to add to the image
 	 *
 	 * @var     array
-	 * @access  protected
 	 */
-	protected $_attributes = array();
+	public $attributes = array();
 
 	/**
 	 * The email address of the user
 	 *
 	 * @var     string
-	 * @access  protected
 	 */
-	protected $_email;
+	public $email;
 
 	/**
 	 * Gravatar constructor
@@ -108,7 +88,9 @@ class Gravatar {
 		$this->email($email);
 
 		if (empty($config))
+		{
 			$this->_config = Kohana::config('gravatar.default');
+		}
 		elseif (is_array($config))
 		{
 			// Setup the configuration
@@ -118,54 +100,12 @@ class Gravatar {
 		elseif (is_string($config))
 		{
 			if ($config = Kohana::config('gravatar.'.$config) === NULL)
+			{
 				throw new Gravatar_Exception('Gravatar.__construct() , Invalid configuration group name : :config', array(':config' => $config));
+			}
 
 			$this->_config = $config + Kohana::config('gravatar.default');
 		}
-	}
-
-	/**
-	 * __get() magic method for accessing email value
-	 *
-	 * @param   mixed        key  the key to get
-	 * @return  mixed        the returned value
-	 * @access  public
-	 */
-	public function __get($key)
-	{
-		if ($key === 'email')
-		{
-			$key = '_'.$key;
-			return $this->$key;
-		}
-		elseif ($this->config[$key] !== NULL)
-			return $this->_config[$key];
-		elseif ($this->attributes[$key] !== NULL)
-			return $this->_attributes[$key];
-		else
-			return NULL;
-	}
-
-	/**
-	 * __set() magic method for setting object properties
-	 * If $var is a method then this will call it, else it will
-	 * set the attribute $key = $value
-	 *
-	 * @param string $key 
-	 * @param string $value 
-	 * @return void
-	 * @author Sam Clark
-	 */
-	public function __set($key, $value)
-	{
-		if ($key === 'email')
-		{
-			$key = '_'.$key;
-			$this->$key;
-		}
-		else
-			$result = $this->add_attribute($key, $value);
-
 	}
 
 	/**
@@ -181,39 +121,22 @@ class Gravatar {
 	}
 
 	/**
-	 * Accessor method for setting email address
-	 *
-	 * @param   string       email  the valid email address of Gravatar user
-	 * @return  self
-	 * @access  public
-	 * @author  Sam Clark
-	 */
-	public function email($email)
-	{
-		if (validate::email($email))
-			$this->_email = strtolower($email);
-		else
-			throw new Gravatar_Exception('The email address : :email is incorrectly formatted', array(':email' => $email));
-
-		return $this;
-	}
-
-	/**
 	 * Accessor method for setting size of gravatar
 	 *
 	 * @param   int          size  the size of the gravatar image in pixels
 	 * @return  self
-	 * @access  public
-	 * @author  Sam Clark
 	 */
-	public function size($size)
+	public function size($size = NULL)
 	{
-		if (ctype_digit((string) $size))
-			$this->_config['size'] = (int) $size;
+		if ($size === NULL)
+		{
+			return $this->_config['size'];
+		}
 		else
-			throw new Gravatar_Exception('The image size must be greater than zero');
-
-		return $this;
+		{
+			$this->_config['size'] = (int) $size;
+			return $this;
+		}
 	}
 
 	/**
@@ -221,15 +144,26 @@ class Gravatar {
 	 *
 	 * @param   string       rating  the rating of the gravatar
 	 * @return  self
-	 * @access  public
-	 * @author  Sam Clark
 	 */
-	public function rating($rating)
+	public function rating($rating = NULL)
 	{
-		if (in_array(strtoupper($rating), array('G', 'PG', 'R', 'X')))
-			$this->_config['rating'] = strtoupper($rating);
+		$rating = strtoupper($rating);
+
+		if ($rating === NULL)
+		{
+			return $this->_config['rating'];
+		}
 		else
-			throw new Gravatar_Exception('The rating value :rating is not valid. Please use G, PG, R or X. Also available through Class constants', array(':rating' => $rating));
+		{
+			if (in_array($rating, array(Gravatar::GRAVATAR_G, Gravatar::GRAVATAR_PG, Gravatar::GRAVATAR_R, Gravatar::GRAVATAR_X)))
+			{
+				$this->_config['rating'] = $rating;
+			}
+			else
+			{
+				throw new Gravatar_Exception('The rating value :rating is not valid. Please use G, PG, R or X. Also available through Class constants', array(':rating' => $rating));
+			}
+		}
 
 		return $this;
 	}
@@ -239,31 +173,24 @@ class Gravatar {
 	 *
 	 * @param   string       url  the url of the image to use instead of the Gravatar
 	 * @return  self
-	 * @access  public
-	 * @author  Sam Clark
 	 */
-	public function default_image($url)
+	public function default_image($url = NULL)
 	{
-		if (validate::url($url))
-			$this->_config['default'] = $url;
+		if ($url === NULL)
+		{
+			return $this->_config['default'];
+		}
 		else
-			throw new Gravatar('The url : :url is improperly formatted', array(':url' => $url));
-
-		return $this;
-	}
-
-	/**
-	 * Allows addition of custom HTML attributes such as 'id' or 'class'.
-	 *
-	 * @param   string       key  the attribute key
-	 * @param   string       value  the attribute value
-	 * @return  self
-	 * @access  public
-	 * @author  Sam Clark
-	 */
-	public function add_attribute($key, $value)
-	{
-		$this->_attributes[$key] = $value;
+		{
+			if (validate::url($url))
+			{
+				$this->_config['default'] = $url;
+			}
+			else
+			{
+				throw new Gravatar('The url : :url is improperly formatted', array(':url' => $url));
+			}
+		}
 
 		return $this;
 	}
@@ -279,17 +206,28 @@ class Gravatar {
 	 */
 	public function render($view = FALSE, $email = NULL)
 	{
-		if (isset($email))
-			$this->email($email);
+		if ($email !== NULL)
+		{
+			$this->email = $email;
+		}
 
 		$data = array('attr' => array(), 'src' => $this->_generate_url());
 
 		if ($this->_attributes)
+		{
 		    $data['attr'] += $this->_attributes;
+		}
 
 		$data['attr']['alt'] = $this->_process_alt();
 
-		return (string) $view ? new View($view, $data) : new View($this->_config['view'], $data);;
+		if ( ! $view)
+		{
+			return new View($this->_config['view'], $data);
+		}
+		else
+		{
+			return new View($view, $data);
+		}
 	}
 
 	/**
@@ -309,9 +247,13 @@ class Gravatar {
 		);
 
 		if ($this->_config['alt'])
+		{
 			$alt = strtr($this->_config['alt'], $keys);
+		}
 		else
+		{
 			$alt = FALSE;
+		}
 
 		return $alt;
 	}
@@ -325,10 +267,15 @@ class Gravatar {
 	 */
 	protected function _generate_url()
 	{
-		$string = $this->_config['service'].'?gravatar_id='.md5($this->_email).'&s='.$this->_config['size'].'&r='.$this->_config['rating'];
+		$string = $this->_config['service'].
+			'?gravatar_id='.md5($this->_email).
+			'&s='.$this->_config['size'].
+			'&r='.$this->_config['rating'];
 
 		if ( ! empty($this->_config['default']))
+		{
 			$string .= '&d='.$this->_config['default'];
+		}
 		
 		return $string;
 	}
