@@ -281,7 +281,7 @@ class Gravatar_Xmlrpc {
 		// Catch all unexpected exceptions
 		catch (Exception $e)
 		{
-			throw new Gravatar_Xmlrpc_Exception($e->getMessage(), 0);
+			throw new Gravatar_Xmlrpc_Exception($e->getMessage(), NULL, $e->getCode());
 		}
 	}
 
