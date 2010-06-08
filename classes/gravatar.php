@@ -85,7 +85,7 @@ class Gravatar {
 	protected function __construct($email, $config = NULL)
 	{
 		// Set the email address
-		$this->email($email);
+		$this->email = $email;
 
 		if (empty($config))
 		{
