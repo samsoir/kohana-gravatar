@@ -213,9 +213,9 @@ class Gravatar {
 
 		$data = array('attr' => array(), 'src' => $this->_generate_url());
 
-		if ($this->_attributes)
+		if ($this->attributes)
 		{
-		    $data['attr'] += $this->_attributes;
+		    $data['attr'] += $this->attributes;
 		}
 
 		$data['attr']['alt'] = $this->_process_alt();
@@ -241,7 +241,7 @@ class Gravatar {
 	{
 		$keys = array
 		(
-			'{$email}'      => $this->_email,
+			'{$email}'      => $this->email,
 			'{$size}'       => $this->_config['size'],
 			'{$rating}'     => $this->_config['rating'],
 		);
@@ -268,7 +268,7 @@ class Gravatar {
 	protected function _generate_url()
 	{
 		$string = $this->_config['service'].
-			'?gravatar_id='.md5($this->_email).
+			'?gravatar_id='.md5($this->email).
 			'&s='.$this->_config['size'].
 			'&r='.$this->_config['rating'];
 
