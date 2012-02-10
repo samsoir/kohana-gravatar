@@ -91,7 +91,7 @@ class Kohana_Gravatar {
 
 		if (empty($config))
 		{
-			$this->_config = Kohana::config('gravatar.default');
+			$this->_config = Kohana::$config->load('gravatar.default');
 		}
 		elseif (is_array($config))
 		{
